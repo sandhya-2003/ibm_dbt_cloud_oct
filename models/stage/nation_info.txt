@@ -4,7 +4,6 @@ with nation_info as (
         n.region_id as n_regionid,
         n.nation_id,
         r.comment as r_comment,
-        n.comment as n_comment,
         r.region_id,
         r.name as r_name
     from {{ ref('stg_nations') }} n

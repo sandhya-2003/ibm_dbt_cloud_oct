@@ -1,5 +1,6 @@
 models:
   - name: stg_regions
+    
     description: "Table with all region information."
     columns:
       - name: region_id
@@ -11,13 +12,29 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ["ASIA", "AFRICA", "AMERICA"]
+                values: ["ASIA", "AFRICA", "AMERICA", "EUROPE", "MIDDLE EAST", "SOUTH EAST"]
                 config:
                   store_failures: true
                   schema: error
+
   - name: stg_nations
+    config:
+      group: sales
+      contract:
+        enforced: true
+        
     columns:
       - name: nation_id
+        data_type: int
+        constraints:
+          - type: not_null
+      - name: name
+        data_type: string
+      - name: region_id
+        data_type: int
+      - name: updated_at
+        data_type: timestamp
+          
         description: '{{ doc("primary_key") }}'
         data_tests:
           - unique
@@ -26,10 +43,14 @@ models:
         description: '{{ doc("foreign_key") }}'
         data_tests:
           - relationships:
-              to: ref('stg_regions')
-              field: region_id
+              arguments:
+                to: ref('stg_regions')
+                field: region_id
 
   - name: stg_customers
+    config:
+      group: sales
+      pre_hook: 'alter session set query_tag= "hooks" '
     columns:
       - name: customer_id
         description: '{{ doc("primary_key") }}'
@@ -39,9 +60,12 @@ models:
       - name: nation_id
         data_tests:
           - relationships:
-              to: ref('stg_nations')
-              field: nation_id
+              arguments:
+                to: ref('stg_nations')
+                field: nation_id
+
   - name: stg_orders
+    
     columns:
       - name: order_id
         description: '{{ doc("primary_key") }}'
@@ -49,14 +73,22 @@ models:
           - unique
           - not_null
       - name: customer_id
+        description: '{{doc("foreign_key")}}'
         data_tests:
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: status_code
         data_tests:
           - accepted_values:
-              values: ["O", "F", "P"]
+              config:
+                store_failures: true
+                schema: error
+
+              arguments:
+                values: ["O", "F", "P"]
+
   - name: stg_line_items
     description: "All items for each orders"
     columns:
@@ -65,4 +97,5 @@ models:
 seeds:
   - name: suppliers
     config:
+
       alias: suppliers_names

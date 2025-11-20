@@ -1,3 +1,8 @@
+{{ config(tags='sample') }}
+{# pre_hook='use warehouse test_wh' #}
+{# post_hook='select * from analytics.dbt_sandhya.stg_regions' #}
+
+
 with customer as (
 select 
                 c_custkey as customer_id,
@@ -10,4 +15,4 @@ select
                 c_comment as c_comment
 from {{ source('src', 'customers') }}
 )
-select * from customer limit 100
+select * from customer
