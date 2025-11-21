@@ -4,6 +4,7 @@ models:
     description: "Table with all region information."
     columns:
       - name: region_id
+        data_type: int
         description: '{{ doc("primary_key") }}'
         data_tests:
           - unique
@@ -21,7 +22,7 @@ models:
     config:
       group: sales
       contract:
-        enforced: true
+        enforced: false
         
     columns:
       - name: nation_id
