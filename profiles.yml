@@ -1,0 +1,15 @@
+
+
+dbt_cloud:
+  outputs:
+    dev:
+      account: STFCHAJ-RGB80942
+      database: analytics
+      password: Sachin$123
+      role: analyticsengineer
+      schema: dbt_ssv
+      threads: 3
+      type: snowflake
+      user: sachin
+      warehouse: transform_wh
+  target: dev
